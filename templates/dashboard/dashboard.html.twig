@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	DashBoard
+{% endblock %}
+
+{% block body %}
+
+	<div class="container">
+		<h1 class="display-4 m-4"> DashBoard </h1>
+
+
+		<h2>Registration Successful!</h2>
+		<p>Welcome, {{ user.username }} !</p>
+		<p>Email : {{ user.email }}</p>
+
+		{% if slug == "companyUser" %}
+			<p>Company: {{ user.companyName }} </p>
+			<p>Company Email: {{ user.companyEmail }} </p>
+		{% elseif slug == "normalUser" %}
+			<p>Member: {{ user.isMember ? 'Yes' : 'No' }} </p>
+		{% endif %}
+
+
+	</div>
+
+
+{% endblock %}

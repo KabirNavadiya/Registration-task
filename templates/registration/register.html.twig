@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Register {{ slug }} {% endblock %}
+
+{% block body %}
+
+<div class="container">
+    <h1 class="display-3">Welcome to The <span class="text-primary">{{ slug|capitalize }}</span> Registration.</h1>
+    <h1 class="display-5"> Register user below.</h1>
+
+    <div class="login-form bg-light mt-4 p-4">
+        {% for error in form.vars.errors %}
+            <div class="alert alert-danger">{{ error.message }}</div>
+        {% endfor %}
+        
+        {{ form_start(form) }}
+            {{ form_row(form.username) }}
+            {{ form_row(form.email) }}
+            {{ form_row(form.password) }}
+
+            {% if form.companyName is defined %}
+                {{ form_row(form.companyName) }}
+                {{ form_row(form.companyEmail) }}
+            {% endif %}
+
+            {% if form.isMember is defined %}
+                {{ form_row(form.isMember) }}
+            {% endif %}
+
+            <button type="submit" class="btn btn-primary">Register</button>
+        {{ form_end(form) }}
+
+    </div>
+
+</div>
+
+
+{% endblock %}
