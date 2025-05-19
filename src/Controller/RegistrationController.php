@@ -11,12 +11,19 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 class RegistrationController extends AbstractController
 {
 
+    private UserPasswordHasherInterface $passwordHasher;
+    public function __construct(UserPasswordHasherInterface $passwordHasher)
+    {
+        $this->passwordHasher = $passwordHasher;
+    }
+
     /** 
-     * @Route("/register/{slug}",name="app_register", requirements = {"slug"="normalUser|companyUser"})
+     * @Route("/register/{type}",name="app_register", requirements = {"slug"="normalUser|companyUser"})
      */
     public function register(string $type, Request $request, EntityManagerInterface $entityManager) : Response
     {
@@ -33,12 +40,17 @@ class RegistrationController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $submittedUser = $form->getData();
+            $plainPassword = $form->get('password')->getData();
+            $hashedPassword = $this->passwordHasher->hashPassword($submittedUser, $plainPassword);
+            $submittedUser->setPassword($hashedPassword);
+        
             $entityManager->persist($submittedUser);
             $entityManager->flush();
-            return $this->redirectToRoute('app_dashboard', [
-                'slug' => $type,
-                'email' => $submittedUser->getEmail(),
-            ]);
+            // return $this->redirectToRoute('app_dashboard', [
+            //     'type' => $type,
+            //     'email' => $submittedUser->getEmail(),
+            // ]);
+            return $this->redirectToRoute('app_login');
             
         }
 
@@ -51,7 +63,7 @@ class RegistrationController extends AbstractController
 
     /**
      * 
-     * @Route("/dashboard/{slug}/{email}",name="app_dashboard")
+     * @Route("/dashboard/{type}/{email}",name="app_dashboard")
      */
     public function registrationSuccess(string $type,string $email, EntityManagerInterface $em):Response
     {

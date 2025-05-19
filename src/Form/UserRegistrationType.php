@@ -8,6 +8,7 @@ use App\Entity\CompanyUser as CompanyUser;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
@@ -28,7 +29,7 @@ class UserRegistrationType extends AbstractType
         $builder
             ->add('username')
             ->add('email')
-            ->add('password');
+            ->add('password',PasswordType::class);
         
 
         $user = $options['data'];
@@ -45,7 +46,6 @@ class UserRegistrationType extends AbstractType
 
             $data = $event->getData();
             $form = $event->getForm();
-
 
 
             if(empty($data->getUsername())){

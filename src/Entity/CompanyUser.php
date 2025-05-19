@@ -4,11 +4,12 @@ namespace App\Entity;
 
 use App\Repository\CompanyUserRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=CompanyUserRepository::class)
  */
-class CompanyUser extends User
+class CompanyUser extends User 
 {
     /**
      * @ORM\Column(type="string", length=50, nullable=true)
