@@ -16,14 +16,14 @@ class RegistrationController extends AbstractController
 {
 
     /** 
-     * @Route("/register/{slug}",name="app_register")
+     * @Route("/register/{slug}",name="app_register", requirements = {"slug"="normalUser|companyUser"})
      */
-    public function register(string $slug, Request $request, EntityManagerInterface $entityManager) : Response
+    public function register(string $type, Request $request, EntityManagerInterface $entityManager) : Response
     {
-        if($slug == "normalUser"){
+        if($type == "normalUser"){
             $user = new NormalUser();
         }   
-        else if($slug == "companyUser"){
+        else if($type == "companyUser"){
             $user = new CompanyUser();
         }
 
@@ -36,7 +36,7 @@ class RegistrationController extends AbstractController
             $entityManager->persist($submittedUser);
             $entityManager->flush();
             return $this->redirectToRoute('app_dashboard', [
-                'slug' => $slug,
+                'slug' => $type,
                 'email' => $submittedUser->getEmail(),
             ]);
             
@@ -44,7 +44,7 @@ class RegistrationController extends AbstractController
 
         return $this->render('registration/register.html.twig', [
             'form' => $form->createView(),
-            'slug' => $slug,
+            'slug' => $type,
         ]);
     }
 
@@ -53,7 +53,7 @@ class RegistrationController extends AbstractController
      * 
      * @Route("/dashboard/{slug}/{email}",name="app_dashboard")
      */
-    public function registrationSuccess(string $slug,string $email, EntityManagerInterface $em):Response
+    public function registrationSuccess(string $type,string $email, EntityManagerInterface $em):Response
     {
         $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
@@ -62,7 +62,7 @@ class RegistrationController extends AbstractController
         }
     
         return $this->render('dashboard/dashboard.html.twig', [
-            'slug' => $slug,
+            'slug' => $type,
             'user' => $user,
             
         ]);

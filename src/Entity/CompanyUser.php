@@ -11,13 +11,6 @@ use Doctrine\ORM\Mapping as ORM;
 class CompanyUser extends User
 {
     /**
-     * @ORM\Id
-     * @ORM\GeneratedValue
-     * @ORM\Column(type="integer")
-     */
-    private $id;
-
-    /**
      * @ORM\Column(type="string", length=50, nullable=true)
      */
     private $companyName;
@@ -26,11 +19,6 @@ class CompanyUser extends User
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $companyEmail;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getCompanyName(): ?string
     {
