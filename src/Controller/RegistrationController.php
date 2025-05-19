@@ -63,18 +63,26 @@ class RegistrationController extends AbstractController
 
     /**
      * 
-     * @Route("/dashboard/{type}/{email}",name="app_dashboard")
+     * @Route("/dashboard",name="app_dashboard")
      */
-    public function registrationSuccess(string $type,string $email, EntityManagerInterface $em):Response
+    public function registrationSuccess(EntityManagerInterface $em):Response
     {
+        $email = $this->getUser()->getUserIdentifier();
         $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
 
         if (!$user) {
             throw $this->createNotFoundException("User not found.");
         }
+
+        if($user instanceof NormalUser){
+            $type = 'normalUser';
+        }
+        else if ($user instanceof CompanyUser){
+            $type = 'companyUser';
+        }
     
         return $this->render('dashboard/dashboard.html.twig', [
-            'slug' => $type,
+            'type' => $type,
             'user' => $user,
             
         ]);
