@@ -14,6 +14,14 @@
         {% endblock %}
     </head>
     <body>
+
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
+            <div class="container-fluid justify-content-end">
+                <a href="/logout" class="btn btn-outline-secondary">Log out</a>
+            </div>
+        </nav>
+        {% endif %}
         {% block body %}{% endblock %}
     </body>
 </html>

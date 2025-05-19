@@ -1,3 +1,4 @@
+import * as bootstrap from 'bootstrap';
 /*
  * Welcome to your app's main JavaScript file!
  *
@@ -9,4 +10,9 @@
 import './styles/app.css';
 
 // start the Stimulus application
-import './bootstrap';
+
+
+window.bootstrap = bootstrap;
+// start the Stimulus application
+import "./bootstrap";
+require("bootstrap/dist/css/bootstrap.css");
