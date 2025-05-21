@@ -47,6 +47,29 @@ class LoanRepository extends ServiceEntityRepository
         }
     }
 
+    public function getAllLoans()
+    {
+        return $this->createQueryBuilder('l')
+            ->join('l.user', 'u')
+            ->join('l.book', 'b')
+            ->orderBy('l.id', 'ASC')
+            ->addSelect('u','b')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+    public function getAllLoansOfCurrentUser(int $id)
+    {
+        return $this->createQueryBuilder('l')
+            ->join('l.user', 'u')
+            ->andwhere('u.id = :id')
+            ->andWhere('l.returnedAt IS NULL')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Loan[] Returns an array of Loan objects
     //  */

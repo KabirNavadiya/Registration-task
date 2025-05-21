@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Repository\BookRepository;
+use App\Repository\LoanRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,10 +49,14 @@ class AdminController extends AbstractController
     /**
     * @Route("/admin/loans",name="app_view_loans")
     */
-    public function viewLoans()
+    public function viewLoans(LoanRepository $loanRepository) : Response
     {
         $this->denyAccessUnlessGranted('ROLE_LIBRARIAN');
-        return $this->render('admin/loans.html.twig');
+        $loans = $loanRepository->getAllLoans();
+
+        return $this->render('admin/loans.html.twig',[
+            'loans' => $loans,
+        ]);
     }
 
 

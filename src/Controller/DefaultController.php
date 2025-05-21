@@ -55,10 +55,9 @@ class DefaultController extends AbstractController
      */
     public function issueBook(int $id,EntityManagerInterface $entityManager,BookRepository $bookRepository):Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $user = $this->getUser();
-        if(!$user){
-            return $this->redirectToRoute('app_login');
-        }
         $book = $bookRepository->find($id);
         if(!$book){
             throw $this->createNotFoundException('Book not found.');
@@ -83,32 +82,14 @@ class DefaultController extends AbstractController
      */
     public function viewIssueList(LoanRepository $loanRepository): Response
     {
-        $loans = $loanRepository->findBy(['returnedAt' => null]);
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $user = $this->getUser();
+        $userid = $user->getId();
+        $loans = $loanRepository->getAllLoansOfCurrentUser($userid);
 
         return $this->render('user/issue_list.html.twig', [
             'loans' => $loans,
         ]);
-    }
-    /**
-     * @Route("/issue-list/data",name="app_issue_list_data")
-     */
-    public function getIssuedBooks(LoanRepository $loanRepository): JsonResponse
-    {
-
-        $data=[];
-        foreach ($loans as $loan) {
-            $book = $loan->getBook();
-            $data[] = [
-                'title' => $book->getTitle(),
-                'author' => $book->getAuthor(),
-                'loanedAt' => $loan->getLoanedAt()->format('Y-m-d'),
-                'dueAt' => $loan->getDueAt()->format('Y-m-d'),
-                'actions' => [
-                    $this->generateUrl('app_return_book', ['id' => $loan->getId()])
-                ]
-            ];
-        }
-        return $this->json(['data' => $data]);
     }
 
     /**
@@ -117,6 +98,8 @@ class DefaultController extends AbstractController
 
     public function returnBook(int $id,LoanRepository $loanRepository, EntityManagerInterface $entityManager ): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+
         $loan = $loanRepository->find($id);
 
         if (!$loan || $loan->getReturnedAt()) {

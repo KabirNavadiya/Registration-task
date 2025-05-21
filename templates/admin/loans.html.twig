@@ -7,6 +7,39 @@
 
         <h1 class="display-4 m-4">View Loans</h1>
 
+        <table class="table table-bordered my-4">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>email</th>
+                <th>Book</th>
+                <th>Loaned At</th>
+                <th>Due At</th>
+                <th>Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.user.username }}</td>
+                    <td>{{ loan.user.email }}</td>
+                    <td>{{ loan.book.title }}</td>
+                    <td>{{ loan.loanedAt|date('Y-m-d') }}</td>
+                    <td>{{ loan.dueAt|days_left }} </td>
+
+                        {% if loan.book.isAvailable %}
+                            <td> {{ loan.returnedAt|date('Y-m-d') }}  </td>
+                        {% else %}
+                            <td class="text-danger"> Not Returned </td>
+                        {% endif %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No issued books.</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
 {% endblock %}
