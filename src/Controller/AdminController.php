@@ -13,6 +13,9 @@ class AdminController extends AbstractController
     public function adminpage()
     {
         $this->denyAccessUnlessGranted('ROLE_LIBRARIAN');
+
+
+
         return $this->render('admin/managebooks.html.twig');
     }
 
@@ -24,5 +27,8 @@ class AdminController extends AbstractController
         $this->denyAccessUnlessGranted('ROLE_LIBRARIAN');
         return $this->render('admin/loans.html.twig');
     }
+
+
+
 
 }
