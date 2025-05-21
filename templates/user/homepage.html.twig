@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    User
+{% endblock %}
+
+{% block body %}
+
+    <div class="container">
+        {% if is_granted('ROLE_LIBRARIAN') %}
+            <h1 class="display-4">Welcome, Admin</h1>
+        {% else %}
+            <h1 class="display-4">Library System</h1>
+        {% endif %}
+
+    </div>
+
+
+{% endblock %}

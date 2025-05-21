@@ -1,30 +1,48 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text></svg>">
-        {# Run `composer require symfony/webpack-encore-bundle` to start using Symfony UX #}
-        {% block stylesheets %}
-            {{ encore_entry_link_tags('app') }}
-        {% endblock %}
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>📚</text></svg>">
 
-        {% block javascripts %}
-            {{ encore_entry_script_tags('app') }}
-        {% endblock %}
-    </head>
-    <body>
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
 
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <nav class="navbar navbar-expand-lg navbar-light bg-light px-3">
-            <div class="container-fluid justify-content-end">
-                <a href="/logout" class="btn btn-outline-secondary">Log out</a>
-            </div>
-        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
-                <a href="{{ path('app_homepage',{'_switch_user':'_exit'}) }}" class="btn btn-outline-secondary">exit</a>
-        {% endif %}
-        </nav>
-        {% endif %}
-        {% block body %}{% endblock %}
-    </body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="{{ path('app_homepage') }}">Library System</a>
+
+        <div class="d-flex ms-auto">
+            {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+                {% if is_granted('ROLE_LIBRARIAN') %}
+                    <a class="btn btn-sm btn-outline-primary mx-1" href="{{ path('app_manage_books') }}">Manage Books</a>
+                    <a class="btn btn-sm btn-outline-primary mx-1" href="{{ path('app_view_loans') }}">View Loans</a>
+                {% endif %}
+
+                {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                    <a class="btn btn-sm btn-outline-warning mx-1" href="{{ path('app_homepage', {'_switch_user': '_exit'}) }}">Exit Impersonation</a>
+                {% endif %}
+
+                <a href="{{ path('app_logout') }}" class="btn btn-sm btn-outline-danger mx-1">Log out</a>
+
+            {% else %}
+                <a href="{{ path('app_login') }}" class="btn btn-sm btn-outline-secondary mx-1">Login</a>
+                <a class="btn btn-sm btn-primary mx-1" href="{{ path('app_register', { type: 'normalUser' }) }}">Register User</a>
+                <a class="btn btn-sm btn-success mx-1" href="{{ path('app_register', { type: 'companyUser' }) }}">Register Librarian</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>
+
+<main class="container mt-4">
+    {% block body %}{% endblock %}
+</main>
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
+</body>
 </html>
