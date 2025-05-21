@@ -54,7 +54,7 @@ class BookController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($book);
             $entityManager->flush();
-
+            $this->addFlash('success', 'Book Updated successfully!');
             return $this->redirectToRoute('app_manage_books');
         }
 
@@ -65,10 +65,8 @@ class BookController extends AbstractController
         ]);
     }
 
-
-
     /**
-     * @Route("/admin/books/delete/{id}", name="app_delete_book")
+     * @Route("/admin/books/delete/{id}", name="app_delete_book",requirements={"id"="\d+"})
      */
     public function deleteBook( int $id, EntityManagerInterface $entityManager):Response
     {

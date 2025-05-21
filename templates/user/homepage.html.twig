@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block body %}
-
     <div class="container">
         {% if is_granted('ROLE_LIBRARIAN') %}
             <h1 class="display-4">Welcome, Admin</h1>
@@ -13,8 +12,23 @@
             <h1 class="display-4">Library System</h1>
         {% endif %}
 
+            {% for flash in app.flashes('success') %}
+                <div data-controller="flash" class="alert alert-success fade show">
+                    {{ flash }}
+                </div>
+            {% endfor %}
 
-
+            <div class="my-4" data-controller="view-available-books" data-view-available-books-url="{{ path('app_available_books') }}">
+                <table id="availablebooksTable" class="table table-bordered my-4" >
+                    <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
     </div>
 
 

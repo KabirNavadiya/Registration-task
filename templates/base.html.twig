@@ -23,6 +23,8 @@
                 {% if is_granted('ROLE_LIBRARIAN') %}
                     <a class="btn btn-sm btn-outline-primary mx-1" href="{{ path('app_manage_books') }}">Manage Books</a>
                     <a class="btn btn-sm btn-outline-primary mx-1" href="{{ path('app_view_loans') }}">View Loans</a>
+                {% else %}
+                    <a class="btn btn-secondary" href="{{ path("app_issue_list") }}">Issue List</a>
                 {% endif %}
 
                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}

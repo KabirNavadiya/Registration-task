@@ -50,19 +50,17 @@ class BookRepository extends ServiceEntityRepository
     // /**
     //  * @return Book[] Returns an array of Book objects
     //  */
-    /*
-    public function findByExampleField($value)
+
+    public function findAllAvailableBooks(): array
     {
         return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
+            ->where('b.isAvailable = :available')
+            ->setParameter('available', true)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
-    */
+
+
 
     /*
     public function findOneBySomeField($value): ?Book
