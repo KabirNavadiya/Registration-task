@@ -30,10 +30,6 @@ class UserRegistrationType extends AbstractType
             ->add('username')
             ->add('email')
             ->add('password',PasswordType::class);
-        
-
-        $user = $options['data'];
-
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
 

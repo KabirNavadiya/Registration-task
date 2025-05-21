@@ -6,8 +6,11 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>📚</text></svg>">
 
     {% block stylesheets %}
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css">
         {{ encore_entry_link_tags('app') }}
     {% endblock %}
+
+
 </head>
 <body>
 
@@ -42,6 +45,10 @@
 </main>
 
 {% block javascripts %}
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
     {{ encore_entry_script_tags('app') }}
 {% endblock %}
 </body>
