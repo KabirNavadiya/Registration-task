@@ -20,6 +20,9 @@
             <div class="container-fluid justify-content-end">
                 <a href="/logout" class="btn btn-outline-secondary">Log out</a>
             </div>
+        {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+                <a href="{{ path('app_homepage',{'_switch_user':'_exit'}) }}" class="btn btn-outline-secondary">exit</a>
+        {% endif %}
         </nav>
         {% endif %}
         {% block body %}{% endblock %}

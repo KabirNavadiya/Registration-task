@@ -8,11 +8,15 @@
     <h1 class="display-4 m-4"> Homepage</h1>
     {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
 
-    <a class="btn btn-primary mx-3" href="{{ path('app_dashboard') }}"> Dashboard</a>
+        {% if is_granted('ROLE_LIBRARIAN') %}
+            <a class="btn btn-primary mx-3" href="{{ path('app_admin') }}">Manage Books</a>
+        {% endif %}
+        <a class="btn btn-primary mx-3" href="{{ path('app_dashboard') }}"> Dashboard</a>
+
     {% else %}
-    <a href="{{ path('app_login') }}" class="btn btn-secondary">Login</a>
-    <a class="btn btn-primary mx-3" href="{{ path('app_register', { type: "normalUser" }) }}"> Register User</a>
-    <a class="btn btn-primary mx-3" href="{{ path('app_register', { type: "companyUser" }) }}"> Register Company User</a>
+        <a href="{{ path('app_login') }}" class="btn btn-secondary">Login</a>
+        <a class="btn btn-primary mx-3" href="{{ path('app_register', { type: "normalUser" }) }}"> Register User</a>
+        <a class="btn btn-primary mx-3" href="{{ path('app_register', { type: "companyUser" }) }}"> Register Librarian</a>
     {% endif %}
 
 </div>

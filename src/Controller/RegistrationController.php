@@ -32,6 +32,8 @@ class RegistrationController extends AbstractController
         }   
         else if($type == "companyUser"){
             $user = new CompanyUser();
+            $user->setRoles(["ROLE_LIBRARIAN"]);
+
         }
 
         // dd($user);
