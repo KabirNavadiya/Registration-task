@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\CompanyUser;
+use App\Entity\AdminUser;
 use App\Entity\NormalUser;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;

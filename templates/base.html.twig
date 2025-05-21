@@ -31,7 +31,7 @@
             {% else %}
                 <a href="{{ path('app_login') }}" class="btn btn-sm btn-outline-secondary mx-1">Login</a>
                 <a class="btn btn-sm btn-primary mx-1" href="{{ path('app_register', { type: 'normalUser' }) }}">Register User</a>
-                <a class="btn btn-sm btn-success mx-1" href="{{ path('app_register', { type: 'companyUser' }) }}">Register Librarian</a>
+                <a class="btn btn-sm btn-success mx-1" href="{{ path('app_register', { type: 'adminUser' }) }}">Register Librarian</a>
             {% endif %}
         </div>
     </div>

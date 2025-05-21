@@ -4,7 +4,7 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\NormalUser as NormalUser;
-use App\Entity\CompanyUser as CompanyUser;
+use App\Entity\AdminUser as CompanyUser;
 use App\Repository\UserRepository;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -33,13 +33,6 @@ class UserRegistrationType extends AbstractType
         
 
         $user = $options['data'];
-        if($user instanceof CompanyUser){
-            $builder
-            ->add('companyName')
-            ->add('companyEmail');
-        }elseif($user instanceof NormalUser){
-            $builder->add('isMember',CheckboxType::class);
-        }
 
 
         $builder->addEventListener(FormEvents::POST_SUBMIT, function (FormEvent $event) {
@@ -53,12 +46,6 @@ class UserRegistrationType extends AbstractType
             }
             if(!filter_var($data->getEmail(),FILTER_VALIDATE_EMAIL)){
                 $form->get('email')->addError(new FormError('Invalid Email address !'));
-            }
-            if (method_exists($data, 'getCompanyEmail')) {
-                $companyEmail = $data->getCompanyEmail();
-                if (!empty($companyEmail) && !filter_var($companyEmail, FILTER_VALIDATE_EMAIL)) {
-                    $form->get('companyEmail')->addError(new FormError('Invalid company email address.'));
-                }
             }
 
             $existingUser = $this->userRepository->findOneBy(['email' => $data->getEmail()]);

@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\CompanyUser;
+use App\Entity\AdminUser;
 use App\Entity\NormalUser;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
@@ -30,8 +30,8 @@ class RegistrationController extends AbstractController
         if($type == "normalUser"){
             $user = new NormalUser();
         }   
-        else if($type == "companyUser"){
-            $user = new CompanyUser();
+        else if($type == "adminUser"){
+            $user = new AdminUser();
             $user->setRoles(["ROLE_LIBRARIAN"]);
 
         }

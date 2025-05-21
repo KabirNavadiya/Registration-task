@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\InheritanceType("SINGLE_TABLE")
  * @ORM\DiscriminatorColumn(name="type", type="string")
  * @ORM\DiscriminatorMap({
- *     "companyUser" = "App\Entity\CompanyUser",
+ *     "adminUser" = "App\Entity\AdminUser",
  *     "normalUser" = "App\Entity\NormalUser"
  * })
  */
