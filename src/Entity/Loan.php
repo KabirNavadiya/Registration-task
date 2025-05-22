@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=LoanRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Loan
 {
@@ -88,10 +89,15 @@ class Loan
         return $this->dueAt;
     }
 
-    public function setDueAt(\DateTimeImmutable $dueAt): self
-    {
-        $this->dueAt = $dueAt;
 
+    /**
+     * @ORM\PrePersist
+    */
+    public function setDueAt(): self
+    {
+        if ($this->loanedAt !== null) {
+            $this->dueAt = $this->loanedAt->modify('+14 days');
+        }
         return $this;
     }
 

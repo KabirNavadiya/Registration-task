@@ -84,9 +84,7 @@ class DefaultController extends AbstractController
         $loan->setUser($user);
         $loan->setBook($book);
         $loan->setLoanedAt(new \DateTimeImmutable());
-        $loan->setDueAt(new \DateTimeImmutable('+14 days'));
         $book->setIsAvailable(false);
-
         $entityManager->persist($loan);
         $entityManager->flush();
         $this->addFlash('success', 'Book issued successfully!');
