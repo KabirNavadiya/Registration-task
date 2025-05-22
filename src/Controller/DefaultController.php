@@ -7,10 +7,12 @@ use App\Entity\Book;
 use App\Entity\Loan;
 use App\Entity\NormalUser;
 use App\Entity\User;
+use App\Event\LoanReturnedEvent;
 use App\Repository\BookRepository;
 use App\Repository\LoanRepository;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -112,7 +114,7 @@ class DefaultController extends AbstractController
      *@Route("/book/return/{id}",name="app_return_book",requirements={"id"="\d+"})
      */
 
-    public function returnBook(int $id,LoanRepository $loanRepository, EntityManagerInterface $entityManager ): Response
+    public function returnBook(int $id,LoanRepository $loanRepository, EntityManagerInterface $entityManager, EventDispatcherInterface $dispatcher): Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
 
@@ -122,14 +124,9 @@ class DefaultController extends AbstractController
             throw $this->createNotFoundException('Invalid or already returned loan.');
         }
 
-        $loan->setReturnedAt(new \DateTimeImmutable());
-        $loan->getBook()->setIsAvailable(true);
-
-        $entityManager->flush();
+        $dispatcher->dispatch(new LoanReturnedEvent($loan), LoanReturnedEvent::LOAN_RETURNED);
 
         $this->addFlash('success', 'Book returned successfully.');
         return $this->redirectToRoute('app_issue_list');
     }
-
-
 }

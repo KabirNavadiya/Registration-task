@@ -12,7 +12,7 @@
         {% endfor %}
         <a class="btn btn-secondary" href="{{ path('app_add_book') }}">Add Book</a>
 
-        <div class="my-4" data-controller="view-books" data-view-books-url="{{ path('app_manage_books_data') }}">
+        <div class="my-4" data-controller="manage-books" data-manage-books-url="{{ path('app_manage_books_data') }}">
             <table id="booksTable" class="table table-bordered my-4" >
                 <thead>
                 <tr>
