@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\CompanyUser;
+use App\Entity\AdminUser;
 use App\Entity\NormalUser;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
@@ -30,11 +30,12 @@ class RegistrationController extends AbstractController
         if($type == "normalUser"){
             $user = new NormalUser();
         }   
-        else if($type == "companyUser"){
-            $user = new CompanyUser();
+        else if($type == "adminUser"){
+            $user = new AdminUser();
+            $user->setRoles(["ROLE_LIBRARIAN"]);
+
         }
 
-        // dd($user);
         $form = $this->createForm(UserRegistrationType::class,$user);
         $form->handleRequest($request);
 
@@ -46,10 +47,6 @@ class RegistrationController extends AbstractController
         
             $entityManager->persist($submittedUser);
             $entityManager->flush();
-            // return $this->redirectToRoute('app_dashboard', [
-            //     'type' => $type,
-            //     'email' => $submittedUser->getEmail(),
-            // ]);
             return $this->redirectToRoute('app_login');
             
         }
@@ -59,35 +56,5 @@ class RegistrationController extends AbstractController
             'slug' => $type,
         ]);
     }
-
-
-    /**
-     * 
-     * @Route("/dashboard",name="app_dashboard")
-     */
-    public function registrationSuccess(EntityManagerInterface $em):Response
-    {
-        $email = $this->getUser()->getUserIdentifier();
-        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-
-        if (!$user) {
-            throw $this->createNotFoundException("User not found.");
-        }
-
-        if($user instanceof NormalUser){
-            $type = 'normalUser';
-        }
-        else if ($user instanceof CompanyUser){
-            $type = 'companyUser';
-        }
-    
-        return $this->render('dashboard/dashboard.html.twig', [
-            'type' => $type,
-            'user' => $user,
-            
-        ]);
-    } 
-
-
 
 }

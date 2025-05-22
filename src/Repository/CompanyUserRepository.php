@@ -2,32 +2,32 @@
 
 namespace App\Repository;
 
-use App\Entity\CompanyUser;
+use App\Entity\AdminUser;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<CompanyUser>
+ * @extends ServiceEntityRepository<AdminUser>
  *
- * @method CompanyUser|null find($id, $lockMode = null, $lockVersion = null)
- * @method CompanyUser|null findOneBy(array $criteria, array $orderBy = null)
- * @method CompanyUser[]    findAll()
- * @method CompanyUser[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method AdminUser|null find($id, $lockMode = null, $lockVersion = null)
+ * @method AdminUser|null findOneBy(array $criteria, array $orderBy = null)
+ * @method AdminUser[]    findAll()
+ * @method AdminUser[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
 class CompanyUserRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, CompanyUser::class);
+        parent::__construct($registry, AdminUser::class);
     }
 
     /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function add(CompanyUser $entity, bool $flush = true): void
+    public function add(AdminUser $entity, bool $flush = true): void
     {
         $this->_em->persist($entity);
         if ($flush) {
@@ -39,7 +39,7 @@ class CompanyUserRepository extends ServiceEntityRepository
      * @throws ORMException
      * @throws OptimisticLockException
      */
-    public function remove(CompanyUser $entity, bool $flush = true): void
+    public function remove(AdminUser $entity, bool $flush = true): void
     {
         $this->_em->remove($entity);
         if ($flush) {
@@ -48,7 +48,7 @@ class CompanyUserRepository extends ServiceEntityRepository
     }
 
     // /**
-    //  * @return CompanyUser[] Returns an array of CompanyUser objects
+    //  * @return AdminUser[] Returns an array of AdminUser objects
     //  */
     /*
     public function findByExampleField($value)
@@ -65,7 +65,7 @@ class CompanyUserRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?CompanyUser
+    public function findOneBySomeField($value): ?AdminUser
     {
         return $this->createQueryBuilder('c')
             ->andWhere('c.exampleField = :val')

@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Books{% endblock %}
+
+{% block body %}
+    <div class="container">
+
+        <h1 class="display-4 m-4">View Loans</h1>
+        <table class="table table-bordered my-4">
+            <thead>
+            <tr>
+                <th>Username</th>
+                <th>email</th>
+                <th>Book</th>
+                <th>Loaned At</th>
+                <th>Due At</th>
+                <th>Returned At</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for loan in loans %}
+                <tr>
+                    <td>{{ loan.user.username }}</td>
+                    <td>{{ loan.user.email }}</td>
+                    <td>{{ loan.book.title }}</td>
+                    <td>{{ loan.loanedAt|date('Y-m-d') }}</td>
+
+                    {% if loan.returnedAt %}
+                        <td class="text-success"> Returned </td>
+                        <td> {{ loan.returnedAt|date('Y-m-d') }}  </td>
+                    {% else %}
+                        <td>{{ loan.dueAt|days_left }} </td>
+                        <td class="text-danger"> Not Returned </td>
+                    {% endif %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No issued books.</td>
+                </tr>
+
+
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ pagerfanta(loans ) }}
+    </div>
+
+{% endblock %}
