@@ -52,6 +52,7 @@ class BookController extends AbstractController
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+
             $entityManager->persist($book);
             $entityManager->flush();
             $this->addFlash('success', 'Book Updated successfully!');

@@ -18,6 +18,12 @@
                 </div>
             {% endfor %}
 
+            {% for flash in app.flashes('warning') %}
+                <div class="alert alert-warning">
+                    {{ flash }}
+                </div>
+            {% endfor %}
+
             <div class="my-4" data-controller="view-available-books" data-view-available-books-url="{{ path('app_available_books') }}">
                 <table id="availablebooksTable" class="table table-bordered my-4" >
                     <thead>

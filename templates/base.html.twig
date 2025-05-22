@@ -23,9 +23,9 @@
                 {% if is_granted('ROLE_LIBRARIAN') %}
                     <a class="btn btn-sm btn-outline-primary mx-1" href="{{ path('app_manage_books') }}">Manage Books</a>
                     <a class="btn btn-sm btn-outline-primary mx-1" href="{{ path('app_view_loans') }}">View Loans</a>
-                {% else %}
-                    <a class="btn btn-secondary" href="{{ path("app_issue_list") }}">Issue List</a>
                 {% endif %}
+
+                <a class="btn btn-sm btn-outline-secondary mx-1" href="{{ path("app_issue_list") }}">Issue List</a>
 
                 {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
                     <a class="btn btn-sm btn-outline-warning mx-1" href="{{ path('app_homepage', {'_switch_user': '_exit'}) }}">Exit Impersonation</a>
@@ -35,8 +35,8 @@
 
             {% else %}
                 <a href="{{ path('app_login') }}" class="btn btn-sm btn-outline-secondary mx-1">Login</a>
-                <a class="btn btn-sm btn-primary mx-1" href="{{ path('app_register', { type: 'normalUser' }) }}">Register User</a>
-                <a class="btn btn-sm btn-success mx-1" href="{{ path('app_register', { type: 'adminUser' }) }}">Register Librarian</a>
+                <a class="btn btn-sm btn-outline-primary mx-1" href="{{ path('app_register', { type: 'normalUser' }) }}">Register User</a>
+                <a class="btn btn-sm btn-outline-success mx-1" href="{{ path('app_register', { type: 'adminUser' }) }}">Register Librarian</a>
             {% endif %}
         </div>
     </div>

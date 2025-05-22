@@ -13,7 +13,7 @@ export default class extends Controller {
                     data: 'actions',
                     render: function (data) {
                         return `
-                            <a href="${data}" class="btn btn-sm btn-success me-1">Issue</a>
+                            <a href="${data}" class="btn btn-sm btn-success me-1">Borrow</a>
                         `;
                     }
                 }

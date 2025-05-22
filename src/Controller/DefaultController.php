@@ -22,9 +22,26 @@ class DefaultController extends AbstractController
     /**
      * @Route("/", name="app_homepage")
      */
-    public function homepage()
+    public function homepage(LoanRepository $loanRepository): Response
     {
-        return $this->render('user/homepage.html.twig');
+        if ($this->getUser()) {
+            $user = $this->getUser();
+            $userId = $user->getId();
+            $loans = $loanRepository->getAllLoansOfCurrentUser($userId);
+            foreach ($loans as $loan) {
+                if ($loan->getDueAt() < new \DateTime() && $loan->getReturnedAt() === null) {
+                    $this->addFlash('warning', 'You have overdue books. Please return them as soon as possible.');
+                    break;
+                }
+            }
+            return $this->render('user/homepage.html.twig',[
+                'loans' => $loans,
+            ]);
+        }
+        else{
+            return $this->render('user/homepage.html.twig');
+        }
+
     }
 
     /**
@@ -34,7 +51,6 @@ class DefaultController extends AbstractController
     {
         $books = $bookRepository->findAllAvailableBooks();
         $data = [];
-
         foreach ($books as $book) {
             $data[] = [
                 'id' => $book->getId(),
