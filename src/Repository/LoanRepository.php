@@ -49,14 +49,14 @@ class LoanRepository extends ServiceEntityRepository
 
     public function getAllLoans()
     {
-        return $this->createQueryBuilder('l')
+        $data=  $this->createQueryBuilder('l')
             ->join('l.user', 'u')
             ->join('l.book', 'b')
             ->orderBy('l.id', 'ASC')
             ->addSelect('u','b')
-            ->getQuery()
-            ->getResult()
-            ;
+            ->setMaxResults(10)
+            ->getQuery();
+        return $data;
     }
 
     public function getAllLoansOfCurrentUser(int $id)

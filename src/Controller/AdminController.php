@@ -4,8 +4,11 @@ namespace App\Controller;
 
 use App\Repository\BookRepository;
 use App\Repository\LoanRepository;
+use Pagerfanta\Doctrine\ORM\QueryAdapter;
+use Pagerfanta\Pagerfanta;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -47,15 +50,25 @@ class AdminController extends AbstractController
     }
 
     /**
-    * @Route("/admin/loans",name="app_view_loans")
+    * @Route("/admin/loans/{page<\d+>}",name="app_view_loans")
     */
-    public function viewLoans(LoanRepository $loanRepository) : Response
+    public function viewLoans(LoanRepository $loanRepository,Request $request, int $page = 1) : Response
     {
         $this->denyAccessUnlessGranted('ROLE_LIBRARIAN');
-        $loans = $loanRepository->getAllLoans();
+//        $loans = $loanRepository->getAllLoans();
+
+
+        $queryBuilder = $loanRepository->getAllLoans();
+
+        $pagerfanta = new Pagerfanta(
+            new QueryAdapter($queryBuilder)
+        );
+
+        $pagerfanta->setMaxPerPage(10);
+        $pagerfanta->setCurrentPage($page);
 
         return $this->render('admin/loans.html.twig',[
-            'loans' => $loans,
+            'loans' => $pagerfanta,
         ]);
     }
 
