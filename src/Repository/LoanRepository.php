@@ -70,6 +70,16 @@ class LoanRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function getNotReturnedLoans()
+    {
+            return $this->createQueryBuilder('l')
+                ->leftJoin('l.user', 'u')
+                ->andWhere('l.returnedAt IS NULL')
+                ->select('u.email as email, l.id as loanId,l.dueAt as dueAt, l.loanedAt as loanedAt')
+                ->getQuery()
+                ->getArrayResult();
+    }
+
     // /**
     //  * @return Loan[] Returns an array of Loan objects
     //  */

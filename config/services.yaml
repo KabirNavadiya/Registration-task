@@ -12,7 +12,7 @@ services:
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
     App\Twig\DaysLeftExtension:
         tags: [ 'twig.extension' ]
-    App\EventListener\LoanReturnedEventListener:
+    App\EventListener\EventSubscriber:
         tags:
             - { name: 'kernel.event_subscriber' }
 
