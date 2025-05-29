@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Manage Books{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <h1 class="display-4 my-4">Manage Books</h1>
+        {% for flash in app.flashes('success') %}
+            <div data-controller="flash" class="alert alert-success fade show">
+                {{ flash }}
+            </div>
+        {% endfor %}
+        <a class="btn btn-secondary" href="{{ path('app_add_book') }}">Add Book</a>
+
+        <div class="my-4" data-controller="manage-books" data-manage-books-url="{{ path('app_manage_books_data') }}">
+            <table id="booksTable" class="table table-bordered my-4" >
+                <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Available</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
