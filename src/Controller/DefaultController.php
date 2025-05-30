@@ -74,7 +74,6 @@ class DefaultController extends AbstractController
     public function issueBook(int $id,EntityManagerInterface $entityManager,BookRepository $bookRepository):Response
     {
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
-
         $user = $this->getUser();
         $book = $bookRepository->find($id);
         if(!$book){

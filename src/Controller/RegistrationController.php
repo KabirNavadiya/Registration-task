@@ -6,6 +6,7 @@ use App\Entity\AdminUser;
 use App\Entity\NormalUser;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
+use App\Message\WelcomeUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,6 +14,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -29,7 +33,7 @@ class RegistrationController extends AbstractController
     /** 
      * @Route("/register/{type}",name="app_register", requirements = {"slug"="normalUser|companyUser"})
      */
-    public function register(MailerInterface $mailer,string $type, Request $request, EntityManagerInterface $entityManager) : Response
+    public function register(string $type, Request $request, EntityManagerInterface $entityManager, MessageBusInterface $messageBus) : Response
     {
         if($type == "normalUser"){
             $user = new NormalUser();
@@ -53,16 +57,11 @@ class RegistrationController extends AbstractController
             $entityManager->flush();
 
 
-            $email = (new TemplatedEmail())
-                ->from(new Address('kabirnavadia27@gmail.com','The Library System'))
-                ->to( new Address($submittedUser->getEmail(), $submittedUser->getUsername()) )
-                ->subject('Welcome to Library System!')
-                ->htmlTemplate('email/email.html.twig')
-                ->context([
-                    'user' => $submittedUser,
-                ])
-            ;
-            $mailer->send($email);
+            $message = new WelcomeUser($submittedUser);
+            $envelope = new Envelope($message,[
+                new DelayStamp(5000),
+            ]);
+            $messageBus->dispatch($envelope);
 
             return $this->redirectToRoute('app_login');
             
