@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% apply inline_css(source('@styles/email.css')) %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>The Library System</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<div class="container">
+    <div class="email-content">
+        <div class="header">
+            <h2>{{ email.subject }}</h2>
+        </div>
+        <div class="body">
+            <h1>Hello👋</h1>
+            <p>
+                You have 2 or more books overdue!
+            </p>
+            <p>
+                Please return the books as soon as possible.
+            </p>
+            <a href="{{ url('app_homepage') }}" class="cta">Return</a>
+        </div>
+        <div class="footer">
+            &copy; {{ "now"|date("Y") }} Our Platform, Inc. All rights reserved.
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{% endapply %}

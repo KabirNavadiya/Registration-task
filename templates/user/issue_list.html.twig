@@ -1,0 +1,42 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Issue List {% endblock %}
+
+{% block body %}
+    <h1>View Issue List</h1>
+
+    {% for flash in app.flashes('success') %}
+        <div data-controller="flash" class="alert alert-success fade show">
+            {{ flash }}
+        </div>
+    {% endfor %}
+
+    <table class="table table-bordered my-4">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Loaned At</th>
+            <th>Due At</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for loan in loans %}
+            <tr>
+                <td>{{ loan.book.title }}</td>
+                <td>{{ loan.book.author }}</td>
+                <td>{{ loan.loanedAt|date('Y-m-d') }}</td>
+                <td>{{ loan.dueAt|days_left }} </td>
+                <td>
+                    <a href="{{ path('app_return_book', { id: loan.id }) }}" class="btn btn-sm btn-warning">Return</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5" class="text-center">No issued books.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
