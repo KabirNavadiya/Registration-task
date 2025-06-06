@@ -18,8 +18,13 @@ class WelcomeUserHandler implements MessageHandlerInterface
 
     public function __invoke(WelcomeUser $user)
     {
-
         $submittedUser = $user->getSubmittedUser();
+
+//        Demonstrating Failure transport :-
+//        if(rand(0,10) < 7 ){
+//            throw new \Exception('I failed randomly!!');
+//        }
+
         $email = (new TemplatedEmail())
             ->from(new Address('kabirnavadia27@gmail.com','The Library System'))
             ->to( new Address($submittedUser->getEmail(), $submittedUser->getUsername()) )

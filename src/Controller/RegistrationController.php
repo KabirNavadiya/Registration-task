@@ -6,6 +6,7 @@ use App\Entity\AdminUser;
 use App\Entity\NormalUser;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
+use App\Message\Command\LogEmoji;
 use App\Message\WelcomeUser;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
@@ -52,7 +53,6 @@ class RegistrationController extends AbstractController
             $plainPassword = $form->get('password')->getData();
             $hashedPassword = $this->passwordHasher->hashPassword($submittedUser, $plainPassword);
             $submittedUser->setPassword($hashedPassword);
-        
             $entityManager->persist($submittedUser);
             $entityManager->flush();
 
@@ -62,6 +62,7 @@ class RegistrationController extends AbstractController
                 new DelayStamp(5000),
             ]);
             $messageBus->dispatch($envelope);
+            $messageBus->dispatch(new LogEmoji(1));
 
             return $this->redirectToRoute('app_login');
             
