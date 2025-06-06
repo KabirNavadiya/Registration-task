@@ -12,7 +12,8 @@ services:
         autowire: true      # Automatically injects dependencies in your services.
         autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
         bind:
-           Psr\Log\LoggerInterface $messengerAuditLogger: '@monolog.logger.messenger_audit'
+            Psr\Log\LoggerInterface $messengerAuditLogger: '@monolog.logger.messenger_audit'
+            $uploadPaths: '%kernel.project_dir%/public/uploads'
     App\Twig\DaysLeftExtension:
         tags: [ 'twig.extension' ]
     App\EventListener\EventSubscriber:
