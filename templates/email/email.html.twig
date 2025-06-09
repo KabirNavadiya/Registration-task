@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% apply inline_css(source('@styles/email.css')) %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome to Our Platform</title>
+
+    {% block stylesheets %}
+        {{ encore_entry_link_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<div class="container">
+    <div class="email-content">
+        <div class="header">
+            <h2>{{ email.subject }}</h2>
+        </div>
+        <div class="body">
+            <h1>Hello {{ user.username}} 👋</h1>
+            <p>
+                Thank you for registering with us. We’re excited to have you on board!
+            </p>
+            <p>
+                Get started by exploring your dashboard, updating your profile, or browsing our latest features.
+            </p>
+            <a href="{{ url('app_homepage') }}" class="cta">Go to Dashboard</a>
+        </div>
+        <div class="footer">
+            &copy; {{ "now"|date("Y") }} Our Platform, Inc. All rights reserved.
+        </div>
+    </div>
+</div>
+</body>
+</html>
+{% endapply %}

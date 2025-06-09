@@ -2,15 +2,23 @@
 
 namespace App\Controller;
 
-use App\Entity\CompanyUser;
+use App\Entity\AdminUser;
 use App\Entity\NormalUser;
 use App\Entity\User;
 use App\Form\UserRegistrationType;
+use App\Message\WelcomeUser;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Messenger\Envelope;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 class RegistrationController extends AbstractController
@@ -25,16 +33,17 @@ class RegistrationController extends AbstractController
     /** 
      * @Route("/register/{type}",name="app_register", requirements = {"slug"="normalUser|companyUser"})
      */
-    public function register(string $type, Request $request, EntityManagerInterface $entityManager) : Response
+    public function register(string $type, Request $request, EntityManagerInterface $entityManager, MessageBusInterface $messageBus) : Response
     {
         if($type == "normalUser"){
             $user = new NormalUser();
         }   
-        else if($type == "companyUser"){
-            $user = new CompanyUser();
+        else if($type == "adminUser"){
+            $user = new AdminUser();
+            $user->setRoles(["ROLE_LIBRARIAN"]);
+
         }
 
-        // dd($user);
         $form = $this->createForm(UserRegistrationType::class,$user);
         $form->handleRequest($request);
 
@@ -46,10 +55,14 @@ class RegistrationController extends AbstractController
         
             $entityManager->persist($submittedUser);
             $entityManager->flush();
-            // return $this->redirectToRoute('app_dashboard', [
-            //     'type' => $type,
-            //     'email' => $submittedUser->getEmail(),
-            // ]);
+
+
+            $message = new WelcomeUser($submittedUser);
+            $envelope = new Envelope($message,[
+                new DelayStamp(5000),
+            ]);
+            $messageBus->dispatch($envelope);
+
             return $this->redirectToRoute('app_login');
             
         }
@@ -59,35 +72,5 @@ class RegistrationController extends AbstractController
             'slug' => $type,
         ]);
     }
-
-
-    /**
-     * 
-     * @Route("/dashboard",name="app_dashboard")
-     */
-    public function registrationSuccess(EntityManagerInterface $em):Response
-    {
-        $email = $this->getUser()->getUserIdentifier();
-        $user = $em->getRepository(User::class)->findOneBy(['email' => $email]);
-
-        if (!$user) {
-            throw $this->createNotFoundException("User not found.");
-        }
-
-        if($user instanceof NormalUser){
-            $type = 'normalUser';
-        }
-        else if ($user instanceof CompanyUser){
-            $type = 'companyUser';
-        }
-    
-        return $this->render('dashboard/dashboard.html.twig', [
-            'type' => $type,
-            'user' => $user,
-            
-        ]);
-    } 
-
-
 
 }
