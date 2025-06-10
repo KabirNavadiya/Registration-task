@@ -11,6 +11,7 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\Image;
 
 class BookType extends AbstractType
 {
@@ -29,6 +30,11 @@ class BookType extends AbstractType
             ->add('imageFile',FileType::class,[
                 'mapped'=>false,
                 'required'=>false,
+                'constraints' => [
+                    new Image(
+                        ['maxSize' => '3m'],
+                    )
+                ]
             ])
             ->add('isAvailable')
         ;

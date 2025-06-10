@@ -36,6 +36,7 @@ class AdminController extends AbstractController
         foreach ($books as $book) {
             $data[] = [
                 'id' => $book->getId(),
+                'image' =>$book->getImageFilename(),
                 'title' => $book->getTitle(),
                 'author' => $book->getAuthor(),
                 'isAvailable' => $book->getIsAvailable() ? 'Yes' : 'No',
@@ -55,11 +56,7 @@ class AdminController extends AbstractController
     public function viewLoans(LoanRepository $loanRepository,Request $request, int $page = 1) : Response
     {
         $this->denyAccessUnlessGranted('ROLE_LIBRARIAN');
-//        $loans = $loanRepository->getAllLoans();
-
-
         $queryBuilder = $loanRepository->getAllLoans();
-
         $pagerfanta = new Pagerfanta(
             new QueryAdapter($queryBuilder)
         );
